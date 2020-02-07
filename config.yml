@@ -1,0 +1,50 @@
+paths:
+
+  # 很多csv
+  # 分成Data目录，和1-14，xxx-yyy等目录，我们还不知道为什么这么分
+  splits: "/export/grid/08/home/gxqing/gjdata/data_201912/splits"
+
+  # 对splits取时间、kks窗口？？
+  # 120个点（kks），是不是模型训练需要的输入点？
+   merge: "/export/grid/08/home/gxqing/gjdata/data_201912/merge_20191210"
+
+  # 对merge进行数据格式转化，csv转化为n个parquet
+  # 120个点
+  convert: "/export/grid/08/home/gxqing/gjdata/data_201912/convert_20191210"
+
+  # 有800多个目录（是不是所有的点？）
+  # 每个点都是一个目录
+  # 目录里是parquet，文件名看不懂
+  re_sample: "/export/grid/12/data/gxqing/gujdata/re_sample"
+
+  # 是空的
+  batch_warning: "/export/grid/08/home/gxqing/gjdata/data_201912/batch_warning"
+
+  # 677行的统计值，统计列比较多                 describe_4.csv
+  # 802行的统计值，统计列很少（max，min，avg）  describe_soot.csv
+  # 124行的统计值，统计列很少（max，min，avg）  describe_soot_v1.csv
+  describe: "/export/grid/12/data/gxqing/gujdata/describe/describe_v1.csv"
+
+  # 文件头
+  # date,收到基水份,收到基灰份,干燥无灰基挥发份,低位发热量,飞灰可燃物含量,大渣可燃物含量
+  coal_quality: "/export/grid/08/home/gxqing/gjdata/data_201912/coal_all.csv"
+
+  # 168个文件，数字命名，是bianry格式，格式不明
+  feature: "/export/grid/08/home/gxqing/gjdata/data_201912/feature"
+
+  # 399M的binary
+  concat: "/export/grid/08/home/gxqing/gjdata/data_201912/concat/concat"
+
+  # 427M的bianry，格式貌似和concat一样
+  extra: "/export/grid/08/home/gxqing/gjdata/data_201912/extra/extra"
+
+  # 1.3G的bianry，格式貌似和concat一样
+  result: "/export/grid/08/home/gxqing/gjdata/data_201912/result/result_temp"
+spark:
+  csv_schema: "row_number BIGINT, date TIMESTAMP, value DOUBLE, status STRING"
+  parquet_schema: "row_number BIGINT, date TIMESTAMP, value DOUBLE, status STRING, point STRING"
+  hdfs_dir: "convert"
+  resample_dir: "resample"
+up_time:
+  start: '2017-05-01'
+  end: '2019-12-20'
