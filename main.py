@@ -38,9 +38,11 @@ def main(
     do_merge:在古交电厂三号机数据中。是按照时间划分成小文件的，需要按照点表的名字进行合并成一个文件
     '''
     # 将split文件夹里面的文件，按照前缀的名字进行merge，写到merge的路径下。
-    # 没看懂的问题是：1、代码中没看出来，merge里面的文件是csv格式的，
+    # 没看懂的问题是：1、代码中没看出来，merge里面的文件是csv格式的，4DCS.40HYA00DU001OUT_20191116232000-20191117160000.csv
+    #                比如split里面: 4DCS.40HYA00DU001OUT_20191116232000-20191117160000.csv
     #         2、单纯看服务器上的文件，spliet和merge的文件名对不上
-    #         3、从merge开始，数据没有csv_schema，parquet_schema等里面的row_number了
+    #         3、数据目录/export/grid/number的含义
+    #         4、从merge开始，数据没有csv_schema，parquet_schema等里面的row_number了
     not do_merge or merge_splits(
         source=config.get("paths").get("splits"),
         target=config.get("paths").get("merge")
@@ -54,7 +56,9 @@ def main(
     )
     # 根据coal_quality_config.csv的配置信息，将coal_quality中的煤炭数据分别存成几个parquet数据到convert中去
     # 此处是：收到基水份,收到基灰份,干燥无灰基挥发份,低位发热量,飞灰可燃物含量,大渣可燃物含量这六个指标的值
-    # 问题是：次处生成的六个文件，不确定是不是parquet格式的（按照代码应该是，但是服务器里的是不是？）
+    # 问题是：1、次处生成的六个文件，不确定是不是parquet格式的（按照代码应该是，但是服务器里的是不是？）
+    #         2、coal_quality_config.csv在哪？
+    #       
     not do_process_coal_quality or _init_spark() and process_coal_quality(
         csv="coal_quality_config.csv",
         source=config.get("paths").get("coal_quality"),
