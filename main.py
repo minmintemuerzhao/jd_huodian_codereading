@@ -102,25 +102,26 @@ def main(
         #csv="data_all_alpha_soot_v1.0.csv"
         csv="data_all_alpha_v3.0.csv"
     )
-
+    # 从coal_hdf中取出来data_all_alpha_v3.0.csv中的CoalQuality对应的六个特征指标的数据，并存到feature路径下
+    # yml里面并没有coal_hdf的路径，
     not do_process_coal or process_coal(
         target=config.get("paths").get("feature"),
         csv="data_all_alpha_v3.0.csv",
         coal_hdf=config.get("paths").get("coal_hdf")
     )
-    # 进行concat操作
+    # 进行concat操作，把feature中分开存的东西都拼接写到concat里面去
     not do_concat or concat_sensors(
         source=config.get("paths").get("feature"),
         target=config.get("paths").get("concat"),
         #csv="data_all_alpha_soot_v1.0.csv"
         csv="data_all_alpha_v3.0.csv"
     )
-
+    # 根据机组实际负荷和各个给煤机瞬时给煤量反馈，拟合并计算额外给煤量
     not do_extra or calculate_extra(
         source=config.get("paths").get("concat"),
         target=config.get("paths").get("extra")
     )
-
+    # 对各种值进行判断处理，获取输出结果
     not do_output or output(
         #source=config.get("paths").get("concat"),
         source=config.get("paths").get("extra"),
@@ -128,7 +129,7 @@ def main(
         target=config.get("paths").get("result"),
         csv="data_all_alpha_v3.0.csv"
     )
-
+    # 把source中的数据，以parquet和csv的格式存到result中去
     not do_output_point or output_point(
         source=config.get("paths").get("re_sample"),
         target=config.get("paths").get("result"),
